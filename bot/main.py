@@ -22,4 +22,4 @@ class MyStreamListener(tweepy.StreamListener):
 # Creating StreamListener
 stream_listener = MyStreamListener()
 stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-stream.filter(track=["NFT"], languages=["en"])
+stream.filter(track=["NFTcollector"], languages=["en"])
