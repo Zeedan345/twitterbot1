@@ -1,20 +1,25 @@
-import discord
-import os
-#import pynacl
-#import dnspython
-import server
-from discord.ext import commands
+import tweepy
+import time
 
-bot = commands.Bot(command_prefix="!")
-TOKEN = os.getenv("DISCORD_TOKEN")
+auth = tweepy.OAuthHandler('kcaGq8On6b2w1lo2nmN9p50dE','Wdxu0bpqhbprTgV0oQyqssrCJ33MfLhsKIeex53z7cSHaSVj8N')
+auth.set_access_token('1467133434615058432-bpkSFTIJqVFAmIUyTb7YMXuyjdddXP','IgBKjvW38QGxANaLrwYa1SzkWGFoeCZf3otANsUe8edWk')
 
-@bot.event
-async def on_ready():
-    print(f"Logged in as {bot.user.name}({bot.user.id})")
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send("pong")
+class MyStreamListener(tweepy.StreamListener):
+    def on_status(self, tweet):
+        print("Tweet Found!")
+        print(f"TWEET: {tweet.author.screen_name} - {tweet.text}")
+        if tweet.in_reply_to_status_id is None and not tweet.favorited:
+            try:
+                print("Attempting like...")
+                api.create_favorite(tweet.id)
+                api.retweet(tweet.id)
+                print("Tweet successfully liked :)")
+            except Exception as err:
+                print(err)
 
-server.server()
-bot.run(TOKEN)
+# Creating StreamListener
+stream_listener = MyStreamListener()
+stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
+stream.filter(track=["Python"], languages=["en"])
