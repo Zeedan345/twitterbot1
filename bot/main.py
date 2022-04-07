@@ -1,8 +1,9 @@
 import tweepy
+import os
 import time
 
-auth = tweepy.OAuthHandler('kcaGq8On6b2w1lo2nmN9p50dE','Wdxu0bpqhbprTgV0oQyqssrCJ33MfLhsKIeex53z7cSHaSVj8N')
-auth.set_access_token('1467133434615058432-bpkSFTIJqVFAmIUyTb7YMXuyjdddXP','IgBKjvW38QGxANaLrwYa1SzkWGFoeCZf3otANsUe8edWk')
+auth = tweepy.OAuthHandler(os.getenv('api_key'),os.getenv('api_key_secret'))
+auth.set_access_token(os.getenv('consumer_key'),os.getenv('consumer_secret'))
 
 api = tweepy.API(auth, wait_on_rate_limit=True)
 
@@ -22,4 +23,4 @@ class MyStreamListener(tweepy.StreamListener):
 # Creating StreamListener
 stream_listener = MyStreamListener()
 stream = tweepy.Stream(auth=api.auth, listener=stream_listener)
-stream.filter(track=["NFTcollector"], languages=["en"])
+stream.filter(track=["Python"], languages=["en"])
